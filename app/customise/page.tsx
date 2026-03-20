@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, CheckCircle2, RotateCcw, Eye, EyeOff } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ChevronLeft, ChevronRight, CheckCircle2, RotateCcw } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Toast from '@/components/ui/Toast'
 import CakePreview from '@/components/customiser/CakePreview'
@@ -28,8 +28,6 @@ export default function CustomisePage() {
   const [showToast, setShowToast] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [showAgreement, setShowAgreement] = useState(false)
-  const [showPreview, setShowPreview] = useState(false)
-
   const totalPrice = useCustomiserStore((s) => s.totalPrice)
   const depositAmount = useCustomiserStore((s) => s.depositAmount)
   const balanceDue = useCustomiserStore((s) => s.balanceDue)
@@ -155,12 +153,32 @@ export default function CustomisePage() {
           </button>
         </div>
 
-        {/* Main layout: form left, preview right */}
-        <div className="grid lg:grid-cols-5 gap-4 sm:gap-8">
+        {/* Mobile layout: compact preview → form → order summary */}
+        <div className="lg:hidden space-y-4">
+          {/* Compact live preview — always visible, 50% shorter */}
+          <CakePreview />
+
+          {/* Step content */}
+          <div className="bg-white rounded-xl border border-ink/8 shadow-sm p-5 min-h-[320px] overflow-hidden">
+            <motion.div
+              key={currentStep}
+              initial={{ x: direction > 0 ? 40 : -40, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+            >
+              <StepComponent />
+            </motion.div>
+          </div>
+
+          {/* Order summary at the bottom */}
+          <OrderSummary />
+        </div>
+
+        {/* Desktop layout: form left, preview+summary right (sticky) */}
+        <div className="hidden lg:grid lg:grid-cols-5 gap-8">
           {/* Form column (60%) */}
-          <div className="lg:col-span-3 order-2 lg:order-1">
-            {/* Step content */}
-            <div className="bg-white rounded-xl sm:rounded-2xl border border-ink/8 shadow-sm p-5 sm:p-6 lg:p-8 min-h-[320px] sm:min-h-[400px] overflow-hidden">
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-2xl border border-ink/8 shadow-sm p-6 lg:p-8 min-h-[400px] overflow-hidden">
               <motion.div
                 key={currentStep}
                 initial={{ x: direction > 0 ? 40 : -40, opacity: 0 }}
@@ -172,44 +190,11 @@ export default function CustomisePage() {
             </div>
           </div>
 
-          {/* Preview column (40%) */}
-          <div className="lg:col-span-2 order-1 lg:order-2">
+          {/* Preview column (40%) — sticky */}
+          <div className="lg:col-span-2">
             <div className="lg:sticky lg:top-24 space-y-4">
-              {/* Mobile: collapsible preview */}
-              <div className="lg:hidden">
-                <button
-                  onClick={() => setShowPreview((v) => !v)}
-                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white border border-ink/8 shadow-sm text-sm font-sans font-medium text-ink"
-                >
-                  <span className="flex items-center gap-2">
-                    {showPreview ? <EyeOff className="w-4 h-4 text-muted" /> : <Eye className="w-4 h-4 text-muted" />}
-                    {showPreview ? 'Hide preview' : 'Show cake preview'}
-                  </span>
-                  <span className="font-serif text-lg text-rose">${totalPrice.toFixed(2)}</span>
-                </button>
-                <AnimatePresence>
-                  {showPreview && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.25 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="mt-3 space-y-3">
-                        <CakePreview />
-                        <OrderSummary />
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Desktop: always visible */}
-              <div className="hidden lg:block space-y-4">
-                <CakePreview />
-                <OrderSummary />
-              </div>
+              <CakePreview />
+              <OrderSummary />
             </div>
           </div>
         </div>

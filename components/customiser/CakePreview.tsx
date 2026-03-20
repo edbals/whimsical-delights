@@ -282,11 +282,13 @@ export default function CakePreview() {
         <span className="text-xs text-muted font-sans">{size} cake</span>
       </div>
 
-      {/* SVG Canvas */}
+      {/* SVG Canvas — cropped on mobile to save vertical space */}
       <div className="flex justify-center px-4 py-2">
         <svg
           viewBox="0 0 300 400"
-          style={{ width: '100%', maxWidth: '280px' }}
+          className="w-full max-h-[160px] lg:max-h-none"
+          style={{ maxWidth: '280px' }}
+          preserveAspectRatio="xMidYMax meet"
           aria-label="Live cake preview"
         >
           {/* Background subtle gradient */}
