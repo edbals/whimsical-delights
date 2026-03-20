@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { AlertTriangle } from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
 import { useCustomiserStore } from '@/store/useCustomiserStore'
 import { format, addDays } from 'date-fns'
@@ -10,11 +11,12 @@ import { cn } from '@/lib/utils'
 export default function StepNotes() {
   const notes = useCustomiserStore((s) => s.notes)
   const date = useCustomiserStore((s) => s.date)
+  const isRushOrder = useCustomiserStore((s) => s.isRushOrder)
   const setNotes = useCustomiserStore((s) => s.setNotes)
   const setDate = useCustomiserStore((s) => s.setDate)
   const [showCalendar, setShowCalendar] = useState(false)
 
-  const minDate = addDays(new Date(), 5)
+  const minDate = addDays(new Date(), 1)
 
   return (
     <div className="space-y-6">
@@ -47,14 +49,16 @@ export default function StepNotes() {
           Preferred delivery / pickup date
         </label>
         <p className="text-xs text-muted font-sans">
-          We need at least 5 days&apos; notice for custom orders.
+          Standard orders require 5+ days notice. Orders within 72 hours incur a 25% rush surcharge.
         </p>
 
         <button
           onClick={() => setShowCalendar((v) => !v)}
           className={cn(
             'flex items-center gap-3 px-4 py-3 rounded-2xl border-2 bg-white transition-colors w-full text-left',
-            showCalendar
+            isRushOrder
+              ? 'border-amber-400/60'
+              : showCalendar
               ? 'border-rose/50'
               : 'border-ink/10 hover:border-rose/40'
           )}
@@ -72,6 +76,29 @@ export default function StepNotes() {
             </button>
           )}
         </button>
+
+        {/* Rush order warning */}
+        <AnimatePresence>
+          {isRushOrder && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="flex items-start gap-2.5 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 mt-1">
+                <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-medium text-amber-800 font-sans">Rush order</p>
+                  <p className="text-xs text-amber-700 font-sans mt-0.5">
+                    A 25% surcharge applies for orders within 72 hours of the event date.
+                    This covers the extra labour and scheduling required for last-minute orders.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <AnimatePresence>
           {showCalendar && (
@@ -112,6 +139,7 @@ export default function StepNotes() {
             {date && (
               <p className="text-sm text-muted font-sans">
                 📅 {format(date, 'EEEE, MMMM d, yyyy')}
+                {isRushOrder && <span className="ml-2 text-amber-600 font-medium">(Rush)</span>}
               </p>
             )}
             {notes && (

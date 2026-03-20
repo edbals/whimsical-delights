@@ -1,6 +1,7 @@
 'use client'
 
 import { create } from 'zustand'
+import { differenceInHours } from 'date-fns'
 
 export type TierCount = 1 | 2
 export type CakeSize = '6"' | '8"' | '10"' | '6"+8"'
@@ -42,6 +43,10 @@ const SIZE_BASE_PRICES: Record<CakeSize, number> = {
 }
 
 export const TAX_RATE = 0.12
+export const RUSH_SURCHARGE_RATE = 0.25
+export const RUSH_HOURS_THRESHOLD = 72
+export const DEPOSIT_RATE = 0.30
+export const DEPOSIT_THRESHOLD = 150
 
 export function computeSubtotal(
   size: CakeSize,
@@ -53,13 +58,31 @@ export function computeSubtotal(
   return base + addonTotal
 }
 
-function computeTotal(
+function isRush(date: Date | null): boolean {
+  if (!date) return false
+  return differenceInHours(date, new Date()) <= RUSH_HOURS_THRESHOLD
+}
+
+function computePrices(
   size: CakeSize,
   tiers: TierCount,
-  addOns: string[]
-): number {
-  const subtotal = computeSubtotal(size, tiers, addOns)
-  return Math.round(subtotal * (1 + TAX_RATE) * 100) / 100
+  addOns: string[],
+  date: Date | null
+) {
+  const subtotalPrice = computeSubtotal(size, tiers, addOns)
+  const rushOrder = isRush(date)
+  const rushFee = rushOrder ? Math.round(subtotalPrice * RUSH_SURCHARGE_RATE * 100) / 100 : 0
+  const priceBeforeTax = subtotalPrice + rushFee
+  const taxAmount = Math.round(priceBeforeTax * TAX_RATE * 100) / 100
+  const totalPrice = Math.round(priceBeforeTax * (1 + TAX_RATE) * 100) / 100
+  const depositAmount = totalPrice > DEPOSIT_THRESHOLD
+    ? Math.round(totalPrice * DEPOSIT_RATE * 100) / 100
+    : 0
+  const balanceDue = depositAmount > 0
+    ? Math.round((totalPrice - depositAmount) * 100) / 100
+    : 0
+
+  return { subtotalPrice, rushFee, isRushOrder: rushOrder, taxAmount, totalPrice, depositAmount, balanceDue }
 }
 
 interface CustomiserState {
@@ -73,8 +96,12 @@ interface CustomiserState {
   notes: string
   date: Date | null
   subtotalPrice: number
+  isRushOrder: boolean
+  rushFee: number
   taxAmount: number
   totalPrice: number
+  depositAmount: number
+  balanceDue: number
 
   setFlavour: (flavour: string) => void
   setFrosting: (frosting: string) => void
@@ -87,9 +114,8 @@ interface CustomiserState {
 }
 
 const DEFAULT_SIZE: CakeSize = '8"'
-const DEFAULT_SUBTOTAL = SIZE_BASE_PRICES[DEFAULT_SIZE]
-const DEFAULT_TAX = Math.round(DEFAULT_SUBTOTAL * TAX_RATE * 100) / 100
-const DEFAULT_TOTAL = Math.round(DEFAULT_SUBTOTAL * (1 + TAX_RATE) * 100) / 100
+
+const defaultPrices = computePrices(DEFAULT_SIZE, 1, [], null)
 
 const defaultState = {
   tiers: 1 as TierCount,
@@ -100,10 +126,8 @@ const defaultState = {
   size: DEFAULT_SIZE,
   addOns: [] as string[],
   notes: '',
-  date: null,
-  subtotalPrice: DEFAULT_SUBTOTAL,
-  taxAmount: DEFAULT_TAX,
-  totalPrice: DEFAULT_TOTAL,
+  date: null as Date | null,
+  ...defaultPrices,
 }
 
 export const useCustomiserStore = create<CustomiserState>((set, get) => ({
@@ -120,28 +144,28 @@ export const useCustomiserStore = create<CustomiserState>((set, get) => ({
   setSugarLevel: (sugarLevel) => set({ sugarLevel }),
 
   setSize: (size) => {
-    const { addOns } = get()
+    const { addOns, date } = get()
     const tiers = size === '6"+8"' ? 2 : 1
-    const subtotalPrice = computeSubtotal(size, tiers, addOns)
-    const taxAmount = Math.round(subtotalPrice * TAX_RATE * 100) / 100
-    const totalPrice = computeTotal(size, tiers, addOns)
-    set({ size, tiers, subtotalPrice, taxAmount, totalPrice })
+    const prices = computePrices(size, tiers, addOns, date)
+    set({ size, tiers, ...prices })
   },
 
   toggleAddOn: (addOn) => {
-    const { addOns, size, tiers } = get()
+    const { addOns, size, tiers, date } = get()
     const next = addOns.includes(addOn)
       ? addOns.filter((a) => a !== addOn)
       : [...addOns, addOn]
-    const subtotalPrice = computeSubtotal(size, tiers, next)
-    const taxAmount = Math.round(subtotalPrice * TAX_RATE * 100) / 100
-    const totalPrice = computeTotal(size, tiers, next)
-    set({ addOns: next, subtotalPrice, taxAmount, totalPrice })
+    const prices = computePrices(size, tiers, next, date)
+    set({ addOns: next, ...prices })
   },
 
   setNotes: (notes) => set({ notes }),
 
-  setDate: (date) => set({ date }),
+  setDate: (date) => {
+    const { size, tiers, addOns } = get()
+    const prices = computePrices(size, tiers, addOns, date)
+    set({ date, ...prices })
+  },
 
   reset: () => set({ ...defaultState }),
 }))

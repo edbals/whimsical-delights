@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button'
 import Toast from '@/components/ui/Toast'
 import CakePreview from '@/components/customiser/CakePreview'
 import OrderSummary from '@/components/customiser/OrderSummary'
+import OrderAgreementModal from '@/components/customiser/OrderAgreementModal'
 import StepFlavour from '@/components/customiser/StepFlavour'
 import StepSize from '@/components/customiser/StepSize'
 import StepAddons from '@/components/customiser/StepAddons'
@@ -26,8 +27,11 @@ export default function CustomisePage() {
   const [direction, setDirection] = useState(1)
   const [showToast, setShowToast] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [showAgreement, setShowAgreement] = useState(false)
 
   const totalPrice = useCustomiserStore((s) => s.totalPrice)
+  const depositAmount = useCustomiserStore((s) => s.depositAmount)
+  const balanceDue = useCustomiserStore((s) => s.balanceDue)
   const reset = useCustomiserStore((s) => s.reset)
 
   const StepComponent = STEPS[currentStep].component
@@ -46,7 +50,12 @@ export default function CustomisePage() {
     }
   }
 
-  const handleSubmit = () => {
+  const handlePlaceOrder = () => {
+    setShowAgreement(true)
+  }
+
+  const handleConfirmOrder = () => {
+    setShowAgreement(false)
     setSubmitted(true)
     setShowToast(true)
   }
@@ -56,6 +65,8 @@ export default function CustomisePage() {
     setSubmitted(false)
     setCurrentStep(0)
   }
+
+  const hasDeposit = depositAmount > 0
 
   if (submitted) {
     return (
@@ -70,10 +81,24 @@ export default function CustomisePage() {
           <h1 className="font-serif text-3xl sm:text-4xl text-ink mb-3">
             Order placed!
           </h1>
-          <p className="text-muted font-sans text-sm leading-relaxed mb-8">
+          <p className="text-muted font-sans text-sm leading-relaxed mb-4">
             Your custom cake order has been received. We&apos;ll be in touch within 24 hours to confirm
             your order and discuss any details.
           </p>
+
+          {hasDeposit && (
+            <div className="mb-8 p-4 rounded-2xl bg-green-50 border border-green-200 space-y-1">
+              <p className="text-sm font-medium text-green-800 font-sans">
+                Deposit of ${depositAmount.toFixed(2)} received
+              </p>
+              <p className="text-xs text-green-700 font-sans">
+                Remaining balance of ${balanceDue.toFixed(2)} due 7–14 days before your event.
+              </p>
+            </div>
+          )}
+
+          {!hasDeposit && <div className="mb-8" />}
+
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button onClick={handleStartOver} variant="primary">
               Order Another Cake
@@ -163,8 +188,8 @@ export default function CustomisePage() {
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               ) : (
-                <Button variant="primary" onClick={handleSubmit}>
-                  Place Order · ${totalPrice}
+                <Button variant="primary" onClick={handlePlaceOrder}>
+                  Place Order · ${totalPrice.toFixed(2)}
                 </Button>
               )}
             </div>
@@ -173,13 +198,18 @@ export default function CustomisePage() {
           {/* Preview column (40%) — sticky on desktop */}
           <div className="lg:col-span-2 order-1 lg:order-2">
             <div className="lg:sticky lg:top-24 space-y-4">
-              {/* Preview on mobile: above form; on desktop: sticky right */}
               <CakePreview />
               <OrderSummary />
             </div>
           </div>
         </div>
       </div>
+
+      <OrderAgreementModal
+        isOpen={showAgreement}
+        onClose={() => setShowAgreement(false)}
+        onConfirm={handleConfirmOrder}
+      />
 
       <Toast
         message="Order placed! 🎂"

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useCustomiserStore } from '@/store/useCustomiserStore'
+import { useCustomiserStore, TAX_RATE } from '@/store/useCustomiserStore'
 import { format } from 'date-fns'
 
 const ADDON_PRICES: Record<string, number> = {
@@ -19,10 +19,8 @@ const SIZE_BASE_PRICES: Record<string, number> = {
   '6"+8"': 449,
 }
 
-const TAX_RATE = 0.12
-
 export default function OrderSummary() {
-  const { flavour, size, addOns, notes, date, subtotalPrice, taxAmount, totalPrice } =
+  const { flavour, size, addOns, notes, date, subtotalPrice, isRushOrder, rushFee, taxAmount, totalPrice, depositAmount, balanceDue } =
     useCustomiserStore()
 
   const sizeLabel = size === '6"+8"' ? '6" + 8" combo' : size
@@ -49,7 +47,10 @@ export default function OrderSummary() {
           {date && (
             <div className="flex justify-between text-sm font-sans">
               <span className="text-muted">Date</span>
-              <span className="text-ink font-medium">{format(date, 'MMM d, yyyy')}</span>
+              <span className="text-ink font-medium">
+                {format(date, 'MMM d, yyyy')}
+                {isRushOrder && <span className="ml-1 text-amber-600">(Rush)</span>}
+              </span>
             </div>
           )}
         </div>
@@ -61,13 +62,19 @@ export default function OrderSummary() {
               <span className="text-ink">${item.price}</span>
             </div>
           ))}
+          {isRushOrder && (
+            <div className="flex justify-between text-sm font-sans text-amber-700">
+              <span>Rush fee (25%)</span>
+              <span>${rushFee.toFixed(2)}</span>
+            </div>
+          )}
         </div>
 
         {/* Subtotal, Tax, Total */}
         <div className="border-t border-ink/8 pt-3 space-y-2">
           <div className="flex justify-between text-sm font-sans">
             <span className="text-muted">Subtotal</span>
-            <span className="text-ink">${subtotalPrice.toFixed(2)}</span>
+            <span className="text-ink">${(subtotalPrice + rushFee).toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm font-sans">
             <span className="text-muted">Tax ({(TAX_RATE * 100).toFixed(0)}%)</span>
@@ -85,6 +92,23 @@ export default function OrderSummary() {
             </motion.span>
           </div>
         </div>
+
+        {/* Deposit breakdown */}
+        {depositAmount > 0 && (
+          <div className="border-t border-ink/8 pt-3 space-y-1.5">
+            <div className="flex justify-between text-sm font-sans">
+              <span className="text-rose font-medium">Deposit due now (30%)</span>
+              <span className="text-rose font-medium">${depositAmount.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between text-sm font-sans">
+              <span className="text-muted">Balance due 7–14 days before event</span>
+              <span className="text-ink">${balanceDue.toFixed(2)}</span>
+            </div>
+            <p className="text-xs text-muted font-sans">
+              The 30% deposit is non-refundable.
+            </p>
+          </div>
+        )}
 
         {notes && (
           <div className="pt-2 border-t border-ink/8">
