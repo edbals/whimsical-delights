@@ -23,8 +23,14 @@ body {
   color: #1C1C1C;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   font-family: var(--font-urbanist);
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 @layer utilities {
@@ -33,12 +39,29 @@ body {
   }
 }
 
+/* Hide scrollbars on horizontal scroll containers */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* react-day-picker overrides */
 .rdp {
   --rdp-cell-size: 40px;
   --rdp-accent-color: #D4A5A5;
   --rdp-background-color: #F5EDE0;
   margin: 0;
+  font-size: 14px;
+}
+
+@media (max-width: 400px) {
+  .rdp {
+    --rdp-cell-size: 36px;
+    font-size: 13px;
+  }
 }
 
 .rdp-day_selected,

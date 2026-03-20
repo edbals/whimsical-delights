@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight, CheckCircle2, RotateCcw } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ChevronLeft, ChevronRight, CheckCircle2, RotateCcw, Eye, EyeOff } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Toast from '@/components/ui/Toast'
 import CakePreview from '@/components/customiser/CakePreview'
@@ -28,6 +28,7 @@ export default function CustomisePage() {
   const [showToast, setShowToast] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [showAgreement, setShowAgreement] = useState(false)
+  const [showPreview, setShowPreview] = useState(false)
 
   const totalPrice = useCustomiserStore((s) => s.totalPrice)
   const depositAmount = useCustomiserStore((s) => s.depositAmount)
@@ -70,15 +71,15 @@ export default function CustomisePage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center px-4">
+      <div className="min-h-screen bg-surface flex items-center justify-center px-4 py-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-          className="bg-white rounded-3xl border border-ink/8 shadow-lg p-10 sm:p-16 max-w-lg w-full text-center"
+          className="bg-white rounded-2xl sm:rounded-3xl border border-ink/8 shadow-lg p-8 sm:p-10 lg:p-16 max-w-lg w-full text-center"
         >
-          <div className="text-6xl mb-6">🎂</div>
-          <h1 className="font-serif text-3xl sm:text-4xl text-ink mb-3">
+          <div className="text-5xl sm:text-6xl mb-4 sm:mb-6">🎂</div>
+          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-ink mb-2 sm:mb-3">
             Order placed!
           </h1>
           <p className="text-muted font-sans text-sm leading-relaxed mb-4">
@@ -87,7 +88,7 @@ export default function CustomisePage() {
           </p>
 
           {hasDeposit && (
-            <div className="mb-8 p-4 rounded-2xl bg-green-50 border border-green-200 space-y-1">
+            <div className="mb-6 sm:mb-8 p-4 rounded-xl sm:rounded-2xl bg-green-50 border border-green-200 space-y-1">
               <p className="text-sm font-medium text-green-800 font-sans">
                 Deposit of ${depositAmount.toFixed(2)} received
               </p>
@@ -97,13 +98,13 @@ export default function CustomisePage() {
             </div>
           )}
 
-          {!hasDeposit && <div className="mb-8" />}
+          {!hasDeposit && <div className="mb-6 sm:mb-8" />}
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button onClick={handleStartOver} variant="primary">
+            <Button onClick={handleStartOver} variant="primary" className="w-full sm:w-auto">
               Order Another Cake
             </Button>
-            <Button onClick={() => window.history.back()} variant="secondary">
+            <Button onClick={() => window.history.back()} variant="secondary" className="w-full sm:w-auto">
               Back to Home
             </Button>
           </div>
@@ -113,18 +114,18 @@ export default function CustomisePage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-surface pb-24 lg:pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="font-serif text-3xl sm:text-4xl text-ink">Build Your Cake</h1>
+        <div className="mb-4 sm:mb-8">
+          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-ink">Build Your Cake</h1>
           <p className="text-muted font-sans text-sm mt-1">
             Step {currentStep + 1} of {STEPS.length} — {STEPS[currentStep].label}
           </p>
         </div>
 
         {/* Step indicator + Reset */}
-        <div className="flex items-center gap-1.5 mb-8 overflow-x-auto pb-1">
+        <div className="flex items-center gap-1.5 mb-4 sm:mb-8 overflow-x-auto pb-1 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
           {STEPS.map((step, i) => (
             <button
               key={step.id}
@@ -132,7 +133,7 @@ export default function CustomisePage() {
                 setDirection(i > currentStep ? 1 : -1)
                 setCurrentStep(i)
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium font-sans whitespace-nowrap transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-full text-xs font-medium font-sans whitespace-nowrap transition-all ${
                 i === currentStep
                   ? 'bg-rose text-white shadow-sm'
                   : i < currentStep
@@ -146,7 +147,7 @@ export default function CustomisePage() {
           ))}
           <button
             onClick={() => { reset(); setCurrentStep(0); setDirection(1) }}
-            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium font-sans whitespace-nowrap text-muted hover:text-ink hover:bg-cream transition-all flex-shrink-0"
+            className="ml-auto flex items-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-full text-xs font-medium font-sans whitespace-nowrap text-muted hover:text-ink hover:bg-cream transition-all flex-shrink-0"
             title="Reset all selections"
           >
             <RotateCcw className="w-3 h-3" />
@@ -155,11 +156,11 @@ export default function CustomisePage() {
         </div>
 
         {/* Main layout: form left, preview right */}
-        <div className="grid lg:grid-cols-5 gap-8">
+        <div className="grid lg:grid-cols-5 gap-4 sm:gap-8">
           {/* Form column (60%) */}
           <div className="lg:col-span-3 order-2 lg:order-1">
             {/* Step content */}
-            <div className="bg-white rounded-2xl border border-ink/8 shadow-sm p-6 sm:p-8 min-h-[400px] overflow-hidden">
+            <div className="bg-white rounded-xl sm:rounded-2xl border border-ink/8 shadow-sm p-5 sm:p-6 lg:p-8 min-h-[320px] sm:min-h-[400px] overflow-hidden">
               <motion.div
                 key={currentStep}
                 initial={{ x: direction > 0 ? 40 : -40, opacity: 0 }}
@@ -169,38 +170,101 @@ export default function CustomisePage() {
                 <StepComponent />
               </motion.div>
             </div>
-
-            {/* Navigation */}
-            <div className="flex justify-between items-center mt-4">
-              <Button
-                variant="secondary"
-                onClick={goBack}
-                disabled={currentStep === 0}
-                className="disabled:opacity-40"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                Back
-              </Button>
-
-              {currentStep < STEPS.length - 1 ? (
-                <Button variant="primary" onClick={goNext}>
-                  Next
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-              ) : (
-                <Button variant="primary" onClick={handlePlaceOrder}>
-                  Place Order · ${totalPrice.toFixed(2)}
-                </Button>
-              )}
-            </div>
           </div>
 
-          {/* Preview column (40%) — sticky on desktop */}
+          {/* Preview column (40%) */}
           <div className="lg:col-span-2 order-1 lg:order-2">
             <div className="lg:sticky lg:top-24 space-y-4">
-              <CakePreview />
-              <OrderSummary />
+              {/* Mobile: collapsible preview */}
+              <div className="lg:hidden">
+                <button
+                  onClick={() => setShowPreview((v) => !v)}
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white border border-ink/8 shadow-sm text-sm font-sans font-medium text-ink"
+                >
+                  <span className="flex items-center gap-2">
+                    {showPreview ? <EyeOff className="w-4 h-4 text-muted" /> : <Eye className="w-4 h-4 text-muted" />}
+                    {showPreview ? 'Hide preview' : 'Show cake preview'}
+                  </span>
+                  <span className="font-serif text-lg text-rose">${totalPrice.toFixed(2)}</span>
+                </button>
+                <AnimatePresence>
+                  {showPreview && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="mt-3 space-y-3">
+                        <CakePreview />
+                        <OrderSummary />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Desktop: always visible */}
+              <div className="hidden lg:block space-y-4">
+                <CakePreview />
+                <OrderSummary />
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sticky bottom navigation for mobile */}
+      <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-white/95 backdrop-blur-sm border-t border-ink/8 px-4 py-3 z-30 safe-bottom">
+        <div className="flex justify-between items-center gap-3 max-w-lg mx-auto">
+          <Button
+            variant="secondary"
+            onClick={goBack}
+            disabled={currentStep === 0}
+            className="disabled:opacity-40 flex-1"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Back
+          </Button>
+
+          {currentStep < STEPS.length - 1 ? (
+            <Button variant="primary" onClick={goNext} className="flex-1">
+              Next
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          ) : (
+            <Button variant="primary" onClick={handlePlaceOrder} className="flex-1">
+              Place Order · ${totalPrice.toFixed(2)}
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Desktop navigation (inline) */}
+      <div className="hidden lg:block max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="lg:w-[60%]">
+          <div className="flex justify-between items-center mt-4">
+            <Button
+              variant="secondary"
+              onClick={goBack}
+              disabled={currentStep === 0}
+              className="disabled:opacity-40"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Back
+            </Button>
+
+            {currentStep < STEPS.length - 1 ? (
+              <Button variant="primary" onClick={goNext}>
+                Next
+                <ChevronRight className="w-4 h-4" />
+              </Button>
+            ) : (
+              <Button variant="primary" onClick={handlePlaceOrder}>
+                Place Order · ${totalPrice.toFixed(2)}
+              </Button>
+            )}
           </div>
         </div>
       </div>

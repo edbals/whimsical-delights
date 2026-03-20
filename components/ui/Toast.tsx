@@ -46,7 +46,7 @@ export default function Toast({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-lg ${colors[variant]} min-w-[260px] max-w-sm`}
+          className={`fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-lg ${colors[variant]} sm:min-w-[260px] sm:max-w-sm`}
         >
           <CheckCircle2 className={`w-5 h-5 flex-shrink-0 ${iconColors[variant]}`} />
           <p className="text-sm font-medium flex-1">{message}</p>

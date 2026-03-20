@@ -65,7 +65,7 @@ export default function OrderAgreementModal({ isOpen, onClose, onConfirm }: Prop
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="relative bg-white rounded-3xl border border-ink/8 shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto"
+            className="relative bg-white rounded-t-2xl sm:rounded-3xl border border-ink/8 shadow-2xl w-full max-w-lg max-h-[92vh] sm:max-h-[85vh] overflow-y-auto self-end sm:self-center"
           >
             {/* Mock payment overlay */}
             <AnimatePresence>
@@ -101,7 +101,7 @@ export default function OrderAgreementModal({ isOpen, onClose, onConfirm }: Prop
             </AnimatePresence>
 
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-ink/8">
+            <div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 border-b border-ink/8 sticky top-0 bg-white z-10">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-rose" />
                 <h2 className="font-serif text-xl text-ink">Order Agreement</h2>
@@ -114,7 +114,7 @@ export default function OrderAgreementModal({ isOpen, onClose, onConfirm }: Prop
               </button>
             </div>
 
-            <div className="px-6 py-5 space-y-5">
+            <div className="px-4 sm:px-6 py-4 sm:py-5 space-y-4 sm:space-y-5">
               {/* Order details */}
               <div>
                 <p className="text-xs font-medium text-muted font-sans tracking-widest uppercase mb-2">
