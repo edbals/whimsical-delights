@@ -16,15 +16,15 @@ export default function StepSize() {
   const setSize = useCustomiserStore((s) => s.setSize)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <div>
-        <h2 className="font-serif text-2xl text-ink">Select your size</h2>
-        <p className="text-muted text-sm mt-1 font-sans">
+        <h2 className="font-serif text-xl sm:text-2xl text-ink">Select your size</h2>
+        <p className="text-muted text-xs sm:text-sm mt-0.5 sm:mt-1 font-sans">
           Sizes are the diameter of the cake. Combo includes two stacked layers.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3">
         {SIZE_OPTIONS.map((option) => {
           const selected = size === option.value
           const isCombo = option.value === '6"+8"'
@@ -37,15 +37,15 @@ export default function StepSize() {
               whileTap={{ scale: 0.98 }}
               onClick={() => setSize(option.value)}
               className={cn(
-                'relative flex flex-col items-center gap-2 p-5 rounded-2xl border-2 text-left transition-all cursor-pointer',
+                'relative flex flex-col items-center gap-1 sm:gap-2 p-3 sm:p-5 rounded-xl sm:rounded-2xl border-2 text-left transition-all cursor-pointer',
                 selected
                   ? 'border-rose bg-rose/10 shadow-sm'
                   : 'border-ink/10 bg-white hover:border-rose/30 hover:bg-cream/30'
               )}
             >
-              {/* Visual */}
+              {/* Visual — hidden on mobile to save space */}
               {!isCombo && (
-                <div className="flex items-end justify-center h-14 mb-1">
+                <div className="hidden sm:flex items-end justify-center h-14 mb-1">
                   <div
                     className={cn(
                       'rounded-full border-2 transition-colors',
@@ -59,7 +59,7 @@ export default function StepSize() {
                 </div>
               )}
               {isCombo && (
-                <div className="flex flex-col items-center gap-0.5 h-14 mb-1 justify-end">
+                <div className="hidden sm:flex flex-col items-center gap-0.5 h-14 mb-1 justify-end">
                   <div
                     className={cn('rounded-sm transition-colors', selected ? 'bg-rose/60' : 'bg-ink/20')}
                     style={{ width: '38px', height: '10px' }}
@@ -72,14 +72,14 @@ export default function StepSize() {
               )}
 
               <div className="text-center">
-                <p className="font-semibold text-sm text-ink font-sans">{option.label}</p>
-                <p className="text-xs text-muted mt-0.5 font-sans">{option.servings}</p>
+                <p className="font-semibold text-xs sm:text-sm text-ink font-sans">{option.label}</p>
+                <p className="text-[10px] sm:text-xs text-muted mt-0.5 font-sans">{option.servings}</p>
                 <p className="text-xs text-muted mt-1 font-sans hidden sm:block">{option.desc}</p>
               </div>
 
               <span
                 className={cn(
-                  'text-sm font-semibold font-sans mt-1',
+                  'text-xs sm:text-sm font-semibold font-sans mt-0.5 sm:mt-1',
                   selected ? 'text-rose' : 'text-ink'
                 )}
               >
@@ -87,8 +87,8 @@ export default function StepSize() {
               </span>
 
               {selected && (
-                <div className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-rose flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-rose flex items-center justify-center">
+                  <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
