@@ -15,7 +15,7 @@ interface Props {
 
 export default function OrderAgreementModal({ isOpen, onClose, onConfirm }: Props) {
   const {
-    size, flavour, addOns, date, notes,
+    size, flavour, filling, addOns, date, notes,
     isRushOrder, rushFee, subtotalPrice,
     taxAmount, totalPrice, depositAmount, balanceDue,
   } = useCustomiserStore()
@@ -129,6 +129,12 @@ export default function OrderAgreementModal({ isOpen, onClose, onConfirm }: Prop
                     <div className="flex justify-between text-sm font-sans">
                       <span className="text-muted">Flavour</span>
                       <span className="text-ink font-medium">{flavour}</span>
+                    </div>
+                  )}
+                  {filling && (
+                    <div className="flex justify-between text-sm font-sans">
+                      <span className="text-muted">Filling</span>
+                      <span className="text-ink font-medium">{filling}</span>
                     </div>
                   )}
                   {addOns.length > 0 && (

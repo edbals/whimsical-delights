@@ -9,6 +9,7 @@ import CakePreview from '@/components/customiser/CakePreview'
 import OrderSummary from '@/components/customiser/OrderSummary'
 import OrderAgreementModal from '@/components/customiser/OrderAgreementModal'
 import StepFlavour from '@/components/customiser/StepFlavour'
+import StepFilling from '@/components/customiser/StepFilling'
 import StepSize from '@/components/customiser/StepSize'
 import StepAddons from '@/components/customiser/StepAddons'
 import StepNotes from '@/components/customiser/StepNotes'
@@ -17,8 +18,9 @@ import { useCustomiserStore } from '@/store/useCustomiserStore'
 const STEPS = [
   { id: 1, label: 'Size',     component: StepSize },
   { id: 2, label: 'Flavour',  component: StepFlavour },
-  { id: 3, label: 'Add-Ons',  component: StepAddons },
-  { id: 4, label: 'Notes',    component: StepNotes },
+  { id: 3, label: 'Filling',  component: StepFilling },
+  { id: 4, label: 'Add-Ons',  component: StepAddons },
+  { id: 5, label: 'Notes',    component: StepNotes },
 ]
 
 

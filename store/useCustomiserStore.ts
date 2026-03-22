@@ -88,6 +88,7 @@ function computePrices(
 interface CustomiserState {
   tiers: TierCount
   flavour: string
+  filling: string
   frosting: string
   frostingColor: string
   sugarLevel: number
@@ -104,6 +105,7 @@ interface CustomiserState {
   balanceDue: number
 
   setFlavour: (flavour: string) => void
+  setFilling: (filling: string) => void
   setFrosting: (frosting: string) => void
   setSugarLevel: (level: number) => void
   setSize: (size: CakeSize) => void
@@ -120,6 +122,7 @@ const defaultPrices = computePrices(DEFAULT_SIZE, 1, [], null)
 const defaultState = {
   tiers: 1 as TierCount,
   flavour: '',
+  filling: '',
   frosting: 'Swiss Meringue Buttercream',
   frostingColor: FROSTING_COLORS['Swiss Meringue Buttercream'],
   sugarLevel: 2,
@@ -134,6 +137,8 @@ export const useCustomiserStore = create<CustomiserState>((set, get) => ({
   ...defaultState,
 
   setFlavour: (flavour) => set({ flavour }),
+
+  setFilling: (filling) => set({ filling }),
 
   setFrosting: (frosting) =>
     set({

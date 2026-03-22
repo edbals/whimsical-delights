@@ -253,7 +253,7 @@ function CakeTier({
 }
 
 export default function CakePreview() {
-  const { tiers, flavour, frosting, frostingColor, size, addOns, totalPrice } =
+  const { tiers, flavour, filling, frosting, frostingColor, size, addOns, totalPrice } =
     useCustomiserStore()
 
   const flavourColor = FLAVOUR_COLORS[flavour] || '#F5E6C8'
@@ -269,6 +269,7 @@ export default function CakePreview() {
   const sizeLabel = size === '6"+8"' ? '6"+8" combo' : size
   const pills = [
     flavour || 'No flavour',
+    filling || 'No filling',
     sizeLabel,
   ]
 

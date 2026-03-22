@@ -20,7 +20,7 @@ const SIZE_BASE_PRICES: Record<string, number> = {
 }
 
 export default function OrderSummary() {
-  const { flavour, size, addOns, notes, date, subtotalPrice, isRushOrder, rushFee, taxAmount, totalPrice, depositAmount, balanceDue } =
+  const { flavour, filling, size, addOns, notes, date, subtotalPrice, isRushOrder, rushFee, taxAmount, totalPrice, depositAmount, balanceDue } =
     useCustomiserStore()
 
   const sizeLabel = size === '6"+8"' ? '6" + 8" combo' : size
@@ -42,6 +42,12 @@ export default function OrderSummary() {
             <div className="flex justify-between text-sm font-sans">
               <span className="text-muted">Flavour</span>
               <span className="text-ink font-medium">{flavour}</span>
+            </div>
+          )}
+          {filling && (
+            <div className="flex justify-between text-sm font-sans">
+              <span className="text-muted">Filling</span>
+              <span className="text-ink font-medium">{filling}</span>
             </div>
           )}
           {date && (
