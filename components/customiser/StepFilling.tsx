@@ -2,33 +2,32 @@
 
 import { motion } from 'framer-motion'
 import { Leaf } from 'lucide-react'
-import { useCustomiserStore } from '@/store/useCustomiserStore'
+import { useCustomiserStore, FILLING_COLORS } from '@/store/useCustomiserStore'
 import { cn } from '@/lib/utils'
 
 interface FillingOption {
   name: string
-  color: string
   seasonal?: boolean
 }
 
 const CLASSIC_FILLINGS: FillingOption[] = [
-  { name: 'Vanilla Buttercream', color: '#FFF8E7' },
-  { name: 'Chocolate Ganache', color: '#3E2723' },
-  { name: 'Strawberry Jam', color: '#E57373' },
-  { name: 'Raspberry Preserves', color: '#C62828' },
-  { name: 'Lemon Curd', color: '#FFF176' },
-  { name: 'Cream Cheese', color: '#FDE8D0' },
-  { name: 'Dulce de Leche', color: '#C68A40' },
-  { name: 'Passionfruit Curd', color: '#FFB74D' },
-  { name: 'Salted Caramel', color: '#A1887F' },
-  { name: 'Mixed Berry Compote', color: '#7B1FA2' },
+  { name: 'Vanilla Buttercream' },
+  { name: 'Chocolate Ganache' },
+  { name: 'Strawberry Jam' },
+  { name: 'Raspberry Preserves' },
+  { name: 'Lemon Curd' },
+  { name: 'Cream Cheese' },
+  { name: 'Dulce de Leche' },
+  { name: 'Passionfruit Curd' },
+  { name: 'Salted Caramel' },
+  { name: 'Mixed Berry Compote' },
 ]
 
 const SEASONAL_FILLINGS: FillingOption[] = [
-  { name: 'Pear Vanilla', color: '#DCE775', seasonal: true },
-  { name: 'Rose', color: '#F48FB1', seasonal: true },
-  { name: 'Peach', color: '#FFAB91', seasonal: true },
-  { name: 'Pistachio', color: '#A5D6A7', seasonal: true },
+  { name: 'Pear Vanilla', seasonal: true },
+  { name: 'Rose', seasonal: true },
+  { name: 'Peach', seasonal: true },
+  { name: 'Pistachio', seasonal: true },
 ]
 
 const ALL_FILLINGS = [...CLASSIC_FILLINGS, ...SEASONAL_FILLINGS]
@@ -69,7 +68,7 @@ export default function StepFilling() {
               >
                 <span
                   className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border border-ink/10 flex-shrink-0"
-                  style={{ backgroundColor: f.color }}
+                  style={{ backgroundColor: FILLING_COLORS[f.name] ?? '#F5EDE0' }}
                 />
                 {f.name}
               </motion.button>
@@ -104,7 +103,7 @@ export default function StepFilling() {
               >
                 <span
                   className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border border-ink/10 flex-shrink-0"
-                  style={{ backgroundColor: f.color }}
+                  style={{ backgroundColor: FILLING_COLORS[f.name] ?? '#F5EDE0' }}
                 />
                 {f.name}
                 <span className="text-[9px] sm:text-[10px] text-sage font-normal">seasonal</span>

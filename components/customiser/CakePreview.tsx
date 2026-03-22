@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { useCustomiserStore, FLAVOUR_COLORS } from '@/store/useCustomiserStore'
+import { useCustomiserStore, FLAVOUR_COLORS, FILLING_COLORS } from '@/store/useCustomiserStore'
 
 // Tier layout spec
 const TIER_DEFS = [
@@ -181,6 +181,7 @@ function CakeTier({
   index,
   flavourColor,
   frostingColor,
+  fillingColor,
   isFunfetti,
   isBlackForest,
 }: {
@@ -188,10 +189,13 @@ function CakeTier({
   index: number
   flavourColor: string
   frostingColor: string
+  fillingColor: string | null
   isFunfetti: boolean
   isBlackForest: boolean
 }) {
   const frostingHeight = 12
+  const fillingHeight = 6
+  const fillingY = tier.y + Math.floor(tier.height / 2) - fillingHeight / 2
 
   return (
     <motion.g
@@ -213,6 +217,22 @@ function CakeTier({
           transition: 'fill 0.4s ease',
         }}
       />
+
+      {/* Filling stripe in the middle of the tier */}
+      {fillingColor && (
+        <rect
+          x={tier.x + 4}
+          y={fillingY}
+          width={tier.width - 8}
+          height={fillingHeight}
+          rx="3"
+          style={{
+            fill: fillingColor,
+            transition: 'fill 0.4s ease',
+          }}
+          opacity="0.85"
+        />
+      )}
 
       {/* Frosting layer on top */}
       {frostingColor !== 'transparent' && (
@@ -258,6 +278,7 @@ export default function CakePreview() {
 
   const flavourColor = FLAVOUR_COLORS[flavour] || '#F5E6C8'
   const effectiveFrostingColor = frostingColor === 'transparent' ? 'transparent' : frostingColor
+  const fillingColor = filling ? (FILLING_COLORS[filling] ?? null) : null
   const isFunfetti = flavour === 'Funfetti'
   const isBlackForest = flavour === 'Black Forest'
   const scale = SIZE_SCALE[size] || 1.0
@@ -345,6 +366,7 @@ export default function CakePreview() {
                   index={i}
                   flavourColor={flavourColor}
                   frostingColor={effectiveFrostingColor}
+                  fillingColor={fillingColor}
                   isFunfetti={isFunfetti}
                   isBlackForest={isBlackForest}
                 />

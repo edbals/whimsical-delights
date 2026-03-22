@@ -9,14 +9,31 @@ export type CakeSize = '6"' | '8"' | '10"' | '6"+8"'
 export const FLAVOUR_COLORS: Record<string, string> = {
   'Angel Food Cake': '#FFFDF7',
   'Baked Flourless Cake': '#5C3317',
-  'Biscuit Cake': '#F5E6C8',
-  'Butter Cake': '#F5E6C8',
+  'Biscuit Cake': '#D4B896',
+  'Butter Cake': '#F2D98B',
   'Carrot Cake': '#C97A3A',
   'Chiffon Cake': '#F9F0A0',
-  'Genoise Cake': '#F5E6C8',
-  'Pound Cake': '#F5E6C8',
+  'Genoise Cake': '#E8D5B0',
+  'Pound Cake': '#E6C88A',
   'Red Velvet Cake': '#8B1A1A',
-  'Sponge Cake': '#F5E6C8',
+  'Sponge Cake': '#F5DEB3',
+}
+
+export const FILLING_COLORS: Record<string, string> = {
+  'Vanilla Buttercream': '#FFF8E7',
+  'Chocolate Ganache': '#3E2723',
+  'Strawberry Jam': '#E57373',
+  'Raspberry Preserves': '#C62828',
+  'Lemon Curd': '#FFF176',
+  'Cream Cheese': '#FDE8D0',
+  'Dulce de Leche': '#C68A40',
+  'Passionfruit Curd': '#FFB74D',
+  'Salted Caramel': '#A1887F',
+  'Mixed Berry Compote': '#7B1FA2',
+  'Pear Vanilla': '#DCE775',
+  'Rose': '#F48FB1',
+  'Peach': '#FFAB91',
+  'Pistachio': '#A5D6A7',
 }
 
 export const FROSTING_COLORS: Record<string, string> = {
