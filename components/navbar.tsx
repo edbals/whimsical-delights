@@ -21,12 +21,12 @@ export default function Navbar() {
     <>
       <header className="sticky top-0 z-40 bg-surface/95 backdrop-blur-sm border-b border-ink/8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16">
+          <div className="flex items-center justify-between h-16 sm:h-20">
             <Link href="/" className="flex-shrink-0" onClick={() => setMobileOpen(false)}>
               <img
                 src="/logo.png"
                 alt="Whimsical Delights"
-                className="h-10 sm:h-12 w-auto mix-blend-multiply"
+                className="h-14 sm:h-16 w-auto mix-blend-multiply"
               />
             </Link>
 
@@ -80,12 +80,12 @@ export default function Navbar() {
             >
               {/* Repeat the header row so user can close */}
               <div className="max-w-7xl mx-auto px-4 sm:px-6">
-                <div className="flex items-center justify-between h-14">
+                <div className="flex items-center justify-between h-16">
                   <Link href="/" className="flex-shrink-0" onClick={() => setMobileOpen(false)}>
                     <img
                       src="/logo.png"
                       alt="Whimsical Delights"
-                      className="h-10 w-auto mix-blend-multiply"
+                      className="h-14 w-auto mix-blend-multiply"
                     />
                   </Link>
                   <button

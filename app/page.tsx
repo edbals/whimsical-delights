@@ -32,90 +32,100 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-surface">
       {/* Hero Section */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-14 sm:pt-16 sm:pb-20 lg:pt-24 lg:pb-28">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="relative">
-            <div className="absolute -top-8 left-1/4 pointer-events-none hidden sm:block">
-              <SparkleIcon className="w-6 h-6 text-gold opacity-60" />
+      <section className="relative overflow-hidden">
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-cream via-surface to-rose/10" />
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #1C1C1C 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+        <div className="absolute top-0 right-0 w-72 h-72 sm:w-96 sm:h-96 bg-rose/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 sm:w-80 sm:h-80 bg-gold/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16 sm:pt-20 sm:pb-24 lg:pt-28 lg:pb-32">
+          <div className="max-w-2xl mx-auto text-center">
+            <div className="relative">
+              <div className="absolute -top-8 left-1/4 pointer-events-none hidden sm:block">
+                <SparkleIcon className="w-6 h-6 text-gold opacity-60" />
+              </div>
+              <div className="absolute top-20 -right-4 pointer-events-none hidden lg:block">
+                <SparkleIcon className="w-5 h-5 text-rose opacity-70" />
+              </div>
+              <div className="absolute bottom-12 -left-6 pointer-events-none hidden lg:block">
+                <SparkleIcon className="w-4 h-4 text-gold opacity-50" />
+              </div>
+
+              <motion.div
+                custom={0}
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/60 backdrop-blur-sm border border-rose/25 mb-4 sm:mb-6"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-rose" />
+                <span className="text-xs font-medium text-rose font-sans">
+                  Victoria&apos;s local custom bakery · Women-owned
+                </span>
+              </motion.div>
+
+              <motion.h1
+                custom={1}
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                className="font-serif text-5xl sm:text-6xl lg:text-8xl text-ink leading-[1.1] tracking-tight"
+              >
+                Whimsical
+                <br />
+                <span className="italic text-rose">Delights</span>
+              </motion.h1>
+
+              <motion.p
+                custom={2}
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                className="mt-5 sm:mt-7 text-base sm:text-lg text-muted font-sans leading-relaxed max-w-md mx-auto px-2"
+              >
+                Premium, personalised cakes for your most special moments — rooted in
+                family baking traditions, made by women, for everyone.
+              </motion.p>
+
+              <motion.div
+                custom={3}
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                className="mt-7 sm:mt-9"
+              >
+                <Link href="/customise">
+                  <Button size="lg" variant="primary" className="w-full sm:w-auto">
+                    Start Customising
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              </motion.div>
+
+              {/* Value pillars */}
+              <motion.div
+                custom={4}
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                className="mt-9 sm:mt-12 flex flex-wrap items-center justify-center gap-2 sm:gap-3"
+              >
+                {[
+                  { emoji: '🌸', label: 'Women-owned' },
+                  { emoji: '👩‍🍳', label: 'Family recipes' },
+                  { emoji: '📍', label: 'Victoria, BC' },
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-ink/10"
+                  >
+                    <span className="text-sm sm:text-base">{item.emoji}</span>
+                    <span className="text-xs font-medium text-ink font-sans">{item.label}</span>
+                  </div>
+                ))}
+              </motion.div>
             </div>
-            <div className="absolute top-16 -right-4 pointer-events-none hidden lg:block">
-              <SparkleIcon className="w-4 h-4 text-rose opacity-70" />
-            </div>
-
-            <motion.div
-              custom={0}
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose/15 border border-rose/25 mb-4 sm:mb-6"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-rose" />
-              <span className="text-xs font-medium text-rose font-sans">
-                Victoria&apos;s local custom bakery
-              </span>
-            </motion.div>
-
-            <motion.h1
-              custom={1}
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              className="font-serif text-4xl sm:text- 5xl lg:text-7xl text-ink leading-tight"
-            >
-              Your cake,
-              <br />
-              <span className="italic text-rose">your way.</span>
-            </motion.h1>
-
-            <motion.p
-              custom={2}
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              className="mt-4 sm:mt-6 text-base sm:text-lg text-muted font-sans leading-relaxed max-w-md mx-auto px-2"
-            >
-              For people in Victoria, BC who need custom desserts for events — Whimsical Delights is your
-              local bakery delivering premium, personalised confections rooted in family baking traditions,
-              made by women, for everyone.
-            </motion.p>
-
-            <motion.div
-              custom={3}
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              className="mt-6 sm:mt-8"
-            >
-              <Link href="/customise">
-                <Button size="lg" variant="primary" className="w-full sm:w-auto">
-                  Start Customising
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-            </motion.div>
-
-            {/* Value pillars */}
-            <motion.div
-              custom={4}
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-2 sm:gap-3"
-            >
-              {[
-                { emoji: '🌸', label: 'Women-owned' },
-                { emoji: '👩‍🍳', label: 'Family recipes' },
-                { emoji: '📍', label: 'Victoria, BC' },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full bg-cream border border-ink/10"
-                >
-                  <span className="text-sm sm:text-base">{item.emoji}</span>
-                  <span className="text-xs font-medium text-ink font-sans">{item.label}</span>
-                </div>
-              ))}
-            </motion.div>
           </div>
         </div>
       </section>
